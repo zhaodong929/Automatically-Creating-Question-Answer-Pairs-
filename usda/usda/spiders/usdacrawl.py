@@ -1,5 +1,5 @@
 import scrapy
-from usda.usda.items import UsdaSpiderItem
+from usda.items import UsdaSpiderItem
 from urllib.parse import urlparse
 from w3lib.html import remove_tags
 import hashlib
