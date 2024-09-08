@@ -4,7 +4,7 @@ from crewai import Agent, Task, Crew, Process
 import spacy
 
 # 设置 OpenAI API Key
-os.environ["OPENAI_API_KEY"] = "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"  # 替换为实际的 OpenAI API Key
+os.environ["OPENAI_API_KEY"] = " "  # 替换为实际的 OpenAI API Key
 os.environ["OPENAI_MODEL_NAME"] = "gpt-4-turbo"
 
 # 加载 NLP 模型，例如 spaCy
