@@ -1,6 +1,0 @@
-@prefix ns1: <http://agriculture.org/> .
-
-ns1:Animals ns1:hasSubTheme "Nutrition security" .
-
-ns1:Nutrition%20security ns1:hasContent "What is nutrition security?" .
-
