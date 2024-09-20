@@ -3,14 +3,13 @@ import csv
 import subprocess
 import re
 from typing import List
-from transformers import pipeline
 from keybert import KeyBERT
 
 # 使用 KeyBERT 提取关键词
 kw_model = KeyBERT(model='bert-base-uncased')
 
 # 加载JSON文件时指定编码格式为UTF-8
-with open('output/1.json', 'r', encoding='utf-8') as file:
+with open('output/4.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
 # 数据预处理函数，清理内容
@@ -48,6 +47,7 @@ def extract_keywords(content: str, num_keywords: int = 5) -> list:
 
 # 使用 llama3.1 生成问题
 def generate_question(content: str) -> str:
+    keywords = extract_keywords(content)
     prompt = (
         f"Analyze the following content and extract the keywords related to agriculture"
         f"Generate a clear and specific question based on obtained keywords. "
@@ -56,7 +56,7 @@ def generate_question(content: str) -> str:
         f"The question must be related to agriculture."
         f"The question can be answered according to the provided content. but the basis does not need to be shown"
         f"Ensure the question is directly related to the provided content. Keep it brief and helpful:\n\n"
-        f"{content}"
+        f"{', '.join(keywords)}.\n\n{content}"
     )
     # 调用本地 llama3.1 模型生成问题
     result = subprocess.run(
