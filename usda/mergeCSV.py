@@ -1,7 +1,7 @@
 import pandas as pd
 
 # 定义CSV文件的路径列表
-csv_files = ['results1.csv', 'results4.csv']
+csv_files = ['test1.csv', 'test2.csv', 'test3.csv', 'test4.csv', 'test5.csv']
 
 # 读取并合并所有CSV文件
 dataframes = []
@@ -20,6 +20,6 @@ for file in csv_files:
 merged_df = pd.concat(dataframes, ignore_index=True)
 
 # 保存合并后的结果到一个新的CSV文件
-merged_df.to_csv('merged_output.csv', index=False, encoding='utf-8')
+merged_df.to_csv('merged_1000test_output.csv', index=False, encoding='utf-8')
 
 print("CSV file successfully merged and saved as 'merged_output.csv'")

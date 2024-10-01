@@ -126,14 +126,14 @@ def process_file(file_path):
     return evaluation_df
 
 # 示例: 调用 process_file 函数，提供 CSV 文件路径
-file_path = 'results.csv'  # 替换为实际文件路径
+file_path = 'output/everyone'  # 替换为实际文件路径
 evaluation_df = process_file(file_path)
 
 # 添加序号列
 evaluation_df.insert(0, 'ID', range(1, len(evaluation_df) + 1))
 
 # 将评估结果保存为CSV文件
-evaluation_df.to_csv('evaluation_results.csv', index=False)
+evaluation_df.to_csv('finally_evaluation_results.csv', index=False)
 
 # 打印综合平均指标
 print("综合平均指标已添加到最后一行并保存到 evaluation_results.csv 文件中。")

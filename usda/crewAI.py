@@ -79,7 +79,7 @@ agricultural_crew = Crew(
 )
 
 # 示例：读取现有的 JSON 数据并生成问答对
-json_file_path = "output/Forestry.json"  # 您提供的 JSON 文件路径
+json_file_path = "output/overall/Forestry.json"  # 您提供的 JSON 文件路径
 data = read_data_from_json(json_file_path)
 
 # 运行 NLP 生成 QnA 对

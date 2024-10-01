@@ -50,5 +50,5 @@ def clean_csv_question_answer(input_csv: str, output_csv: str):
 
 # 使用该函数清理CSV文件
 input_csv = 'merged_output.csv'
-output_csv = 'results_cleaned.csv'
+output_csv = 'finally_results_cleaned_2.csv'
 clean_csv_question_answer(input_csv, output_csv)

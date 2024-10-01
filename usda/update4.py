@@ -9,7 +9,7 @@ from keybert import KeyBERT
 kw_model = KeyBERT(model='bert-base-uncased')
 
 # 加载JSON文件时指定编码格式为UTF-8
-with open('output/4.json', 'r', encoding='utf-8') as file:
+with open('output/test2/4.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
 # 数据预处理函数，清理内容
@@ -212,16 +212,16 @@ except KeyboardInterrupt:
 
 finally:
     # 无论是否中断，保存已生成的问答对
-    with open('demo1.json', 'w', encoding='utf-8') as f:
+    with open('output/outcome/demo4_2.json', 'w', encoding='utf-8') as f:
         json.dump(qa_results2, f, ensure_ascii=False, indent=4)
     print("Question and answer pairs are generated and saved to a file 'demo1.json'")
 
     # 读取qa_results2.json并转换为CSV格式
-    with open('demo1.json', 'r', encoding='utf-8') as json_file:
+    with open('output/outcome/demo4_2.json', 'r', encoding='utf-8') as json_file:
         qa_data = json.load(json_file)
 
     # 写入CSV文件
-    with open('demo1.csv', 'w', newline='', encoding='utf-8') as csv_file:
+    with open('output/outcome/demo4_2.csv', 'w', newline='', encoding='utf-8') as csv_file:
         csv_writer = csv.writer(csv_file)
         # 写入标题行
         csv_writer.writerow(['content', 'question', 'answer'])
@@ -230,4 +230,4 @@ finally:
         for entry in qa_data:
             csv_writer.writerow([entry['content'], entry['question'], entry['answer']])
 
-    print("CSV file 'demo1.csv' created")
+    print("CSV file 'demo4_2.csv' created")
