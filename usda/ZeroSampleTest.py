@@ -4,16 +4,15 @@ from bert_score import score as bert_score
 from nltk.translate.bleu_score import sentence_bleu
 from rouge_score import rouge_scorer
 import re
-import numpy as np
 
-# Step 1: 从 CSV 文件中加载测试集
-test_set_file = 'test4.csv'
+# Step 1: Load the test set from a CSV file
+test_set_file = 'test1.csv' 
 df = pd.read_csv(test_set_file)
 
-# 定义清理生成文本的函数
+# Define a function to clean generated text
 def clean_generated_text(text: str) -> str:
     text = re.sub(r"Here['’]s a specific.*?:", "", text, flags=re.DOTALL)
-    text = re.sub(r"Here's a concise question related to the content.*?:", "", text, flags=re.DOTALL)
+    text = re.sub(r"Here's a concise question related to the content.*?:", "", text, flags=re.DOTALL)  
     text = re.sub(r"Based on the provided content.*?:", "", text, flags=re.DOTALL)
     text = re.sub(r"I would like to offer a.*?:", "", text, flags=re.DOTALL)
     text = re.sub(r"This question.*?\. ", "", text, flags=re.DOTALL)
@@ -21,11 +20,11 @@ def clean_generated_text(text: str) -> str:
     text = re.sub(r"\s+", " ", text)
     return text.strip()
 
-# 使用 llama3.1 模型生成答案
+# Generate an answer using the llama3.1 model
 def generate_llm_answer(question: str) -> str:
     prompt = f"Provide a clear answer to the following question:\n\nQuestion: {question}"
     result = subprocess.run(
-        ["ollama", "run", "llama3.1"],  # 请确保您的 llama3.1 模型可以通过命令行运行
+        ["ollama", "run", "llama3.1"],  # Ensure that your llama3.1 model can be run from the command line
         input=prompt,
         capture_output=True, text=True, encoding='utf-8'
     )
@@ -37,22 +36,16 @@ def generate_llm_answer(question: str) -> str:
         print(f"Error generating answer: {result.stderr}")
         return None
 
-# 计算评估指标的函数
+# Function to calculate evaluation metrics
 def calculate_evaluation_metrics(reference: str, hypothesis: str) -> dict:
-    # 确保 reference 和 hypothesis 是字符串类型，且不是空值
-    if not isinstance(reference, str) or pd.isna(reference):
-        reference = ""
-    if not isinstance(hypothesis, str) or pd.isna(hypothesis):
-        hypothesis = ""
+    # Calculate BLEU score
+    bleu = sentence_bleu([reference.split()], hypothesis.split())
 
-    # 计算 BLEU 分数
-    bleu = sentence_bleu([reference.split()], hypothesis.split()) if reference and hypothesis else 0.0
-
-    # 计算 ROUGE 分数
+    # Calculate ROUGE score
     scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
     rouge_scores = scorer.score(reference, hypothesis)
 
-    # 计算 BERTScore
+    # Calculate BERTScore
     P, R, F1 = bert_score([hypothesis], [reference], lang="en", verbose=False)
     bertscore = F1.mean().item()
 
@@ -64,28 +57,24 @@ def calculate_evaluation_metrics(reference: str, hypothesis: str) -> dict:
         "BERTScore": bertscore
     }
 
-# Step 2: 使用 LLM 生成答案并与测试集答案进行对比
+# Step 2: Generate answers using LLM and compare with test set answers
 results = []
 for index, row in df.iterrows():
-    content = row['content']  # 文本内容
-    question = row['question']  # 问题
-    true_answer = row['answer']  # 测试集中的答案
+    content = row['content']  # Content text
+    question = row['question']  # Question
+    true_answer = row['answer']  # Answer from the test set
 
-    # 如果 true_answer 是空的或非字符串，跳过该条目
-    if pd.isna(true_answer) or not isinstance(true_answer, str):
-        continue
-
-    # 使用 LLM 生成答案
+    # Generate answer using LLM
     generated_answer = generate_llm_answer(question)
 
-    # 如果模型未生成答案，跳过此条目
+    # Skip entry if no answer is generated
     if not generated_answer:
         continue
 
-    # 计算评估指标
+    # Calculate evaluation metrics
     metrics = calculate_evaluation_metrics(true_answer, generated_answer)
 
-    # 存储结果
+    # Store results
     results.append({
         "Content": content,
         "Question": question,
@@ -98,7 +87,7 @@ for index, row in df.iterrows():
         "BERTScore": metrics["BERTScore"]
     })
 
-# Step 3: 保存评估结果到一个新的 CSV 文件
+# Step 3: Save evaluation results to a new CSV file
 evaluation_results_df = pd.DataFrame(results)
-evaluation_results_df.to_csv('evaluation_TestResults4.csv', index=False, encoding='utf-8')
-print("Evaluation results saved to 'evaluation_TestResults.csv'.")
+evaluation_results_df.to_csv('evaluation_TestResults1.csv', index=False, encoding='utf-8')
+print("Evaluation results saved to 'evaluation_TestResults1.csv'.")
